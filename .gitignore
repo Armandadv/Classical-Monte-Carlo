@@ -1,0 +1,4 @@
+# Artefacts de compilation
+bin/
+bin_test/
+*.class
