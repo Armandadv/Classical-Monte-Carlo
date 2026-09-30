@@ -88,7 +88,7 @@ public final class AppParallel {
         "  java -cp \"bin:lib/*\" AppParallel --bench <fichierInput> <La> <Lb>",
         "",
         "Positionnels (valeurs par defaut entre parentheses) :",
-        "  inputDir           repertoire contenant les fichiers bcaoExplor_*",
+        "  inputDir           repertoire contenant les fichiers input_*",
         "  outputDir          repertoire de sortie (cree au besoin)",
         "  totalThreads       (Runtime.availableProcessors()) coeurs a utiliser au total",
         "  threadsPerReplica  (4)     threads par replique ; cf. --bench",
@@ -808,8 +808,8 @@ public final class AppParallel {
         int nFiles = 0;
         for (File file : files) {
             // isFile() : erreur d'usage claire avant la construction (Input est fail-fast), sinon
-            // un sous-repertoire nomme bcaoExplor_* finirait en echec de replique.
-            if (!file.isFile() || !file.getName().startsWith("bcaoExplor")) continue;
+            // un sous-repertoire nomme input_* finirait en echec de replique.
+            if (!file.isFile() || !file.getName().startsWith("input_")) continue;
             nFiles++;
             for (int k = 0; k < nH; k++) {
                 final double h = a.runUnderField ? a.hStart + k * a.hStep : 0.0;
@@ -827,7 +827,7 @@ public final class AppParallel {
         printOptions(a, cores, concurrentReplicas, nFiles, nH, tasks.size());
 
         if (tasks.isEmpty() && acTasks.isEmpty()) {
-            System.out.println("Aucune replique a lancer (fichiers bcaoExplor* : " + nFiles
+            System.out.println("Aucune replique a lancer (fichiers input_* : " + nFiles
                     + ", champs : " + nH + ").");
             return EXIT_USAGE;
         }
@@ -956,7 +956,7 @@ public final class AppParallel {
     private static void printOptions(Args a, int cores, int concurrentReplicas,
                                      int nFiles, int nH, int nTasks) {
         System.out.println("---- AppParallel ----");
-        System.out.println("  entree            : " + a.inputDir + " (" + nFiles + " fichier(s) bcaoExplor_*)");
+        System.out.println("  entree            : " + a.inputDir + " (" + nFiles + " fichier(s) input_*)");
         System.out.println("  sortie            : " + a.outputDir);
         System.out.printf(Locale.US, "  reseau            : %d x %d x 2 = %d sites%n",
                 a.La, a.Lb, a.La * a.Lb * HoneycombGeometry.SUBLATTICES);
