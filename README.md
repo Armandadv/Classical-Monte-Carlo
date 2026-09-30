@@ -27,8 +27,7 @@ terme de Zeeman en revanche couple le champ appliqué au spin habillé par $g$. 
 simulé s'écrit donc :
 
 $$H = -\sum_{n}\ \sum_{\langle ij\rangle_n} \mathbf{S}_i \cdot \mathbb{J}_{n} \cdot \mathbf{S}_j
-\;-\; \sum_i \mathbf{B}\cdot g\cdot\mathbf{S}_i
-\;-\; b\sum_{\langle ij\rangle\in\gamma} \left(S_i^\gamma S_j^\gamma\right)^2$$
+- \sum_i \mathbf{B}\cdot g\cdot\mathbf{S}_i- b\sum_{\langle ij\rangle\in\gamma} \left(S_i^\gamma S_j^\gamma\right)^2$$
 
 Le premier terme porte sur les $n$èmes voisins, chaque $\mathbb{J}_n$ étant une matrice
 symétrique de dimension 3 lue dans le fichier d'entrée, la symétrie étant contrôlée à la
