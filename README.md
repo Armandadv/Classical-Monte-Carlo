@@ -26,32 +26,34 @@ c'est-à-dire qu'elle est directement incorporée dans les termes d'échange ani
 terme de Zeeman en revanche couple le champ appliqué au spin habillé par $g$. Le modèle
 simulé s'écrit donc :
 
-$$H = -\sum_{n}\ \sum_{\langle ij\rangle_n} \mathbf{S}_i \cdot \mathbb{J}_{n} \cdot \mathbf{S}_j
-- \sum_i \mathbf{B}\cdot g\cdot\mathbf{S}_i- b\sum_{\langle ij\rangle\in\gamma} \left(S_i^\gamma S_j^\gamma\right)^2$$
+$$
+H = -\sum_{n} \sum_{\langle ij\rangle_n} \mathbf{S}_i \cdot \mathbb{J}_{n} \cdot \mathbf{S}_j - \sum_i \mathbf{B}\cdot g\cdot\mathbf{S}_i - b\sum_{\langle ij\rangle\in\gamma} \left(S_i^\gamma S_j^\gamma\right)^2
+$$
 
 Le premier terme porte sur les $n$èmes voisins, chaque $\mathbb{J}_n$ étant une matrice
 symétrique de dimension 3 lue dans le fichier d'entrée, la symétrie étant contrôlée à la
 construction et la réciprocité des liens vérifiée et signalée. Toute paramétrisation usuelle
 s'y exprime pour des premiers voisins edans la base du fichier d'input. Par exemple dans la base Kitaev, on peut écrire la matrice qui couple le liens $z$ comme :
 
-$$\mathbb{J}_z = \begin{pmatrix} J_1 & \Gamma & \Gamma'\\ \Gamma & J_1 & \Gamma'\\ \Gamma' & \Gamma' & J_1 + K \end{pmatrix},$$
+$$
+\mathbb{J}_z = \begin{pmatrix} J_1 & \Gamma & \Gamma' \cr \Gamma & J_1 & \Gamma' \cr \Gamma' & \Gamma' & J_1 + K \end{pmatrix},
+$$
 
 où le terme commun sur la diagonale $J_1$ correspond au couplage isotrope de Heisenberg, le
 terme $K$ est le terme de Kitaev qui couple les composantes de spin le long du lien
 considéré, et $\Gamma$, $\Gamma'$ sont les échanges hors diagonaux. Les voisins plus lointains
 sont peuvent eux aussi être écrit sous cette forme $\mathbb{J}_2$, $\mathbb{J}_3$, $\mathbb{J}_4$. Le dernier terme du Hamiltonien, optionnel
 (activé par une ligne `QUARTIC` dans le fichier d'entrée), est un couplage biquadratique sur
-premiers voisins le long du lien $\gamma$. Sa variable de liaison $\tau_b =
-(S_i^\gamma S_j^\gamma)^2$ est mesurée par un canal de sortie dédié.
+premiers voisins le long du lien $\gamma$. Sa variable de liaison $\tau_b = (S_i^\gamma S_j^\gamma)^2$ est mesurée par un canal de sortie dédié.
 
-Les conventions sont les suivantes : 
+Les conventions sont les suivantes :
 
 - $k_B = 1$ : la température est dans les mêmes unités que les couplages $J$ du fichier d'entrée (meV).
 - Spins unitaires : les spins sont des vecteurs unitaires 3D ($|\mathbf{S}| = 1$).
 - $\hbar = 1$ dans la dynamique.
 - Champ magnétique : le champ $\mathbf{B}$ (en meV) est exprimé via le tenseur $g$ du fichier d'entrée.
 - Conditions aux bords périodiques : elles imposent une quantification des vecteurs d'onde ($\mathbf{Q} = 2\pi\mathbf{n}/L$) et provoquent un verrouillage commensurable intrinsèque.
-- Tailles de réseau : typiquement de $24\times24\times2$ pour les mesures sous champ magnétique, et jusqu'à $60\times60\times2$ lorsque l'état d'équilibre est supposé incommensurable.
+- Tailles de réseau : typiquement de 24×24×2 pour les mesures sous champ magnétique, et jusqu'à 60×60×2 lorsque l'état d'équilibre est supposé incommensurable.
 
 ## Échantillonnage markovien et algorithme de Metropolis
 
@@ -64,18 +66,24 @@ thermodynamique d'une observable physique telle que l'aimantation, l'énergie ou
 en se basant sur la distribution de Boltzmann, où la probabilité d'occuper un micro-état
 $x$ est donnée par :
 
-$$p(x) = \frac{1}{Z}\, e^{-\beta E(x)}.$$
+$$
+p(x) = \frac{1}{Z}\, e^{-\beta E(x)}.
+$$
 
 L'idée de Metropolis est de construire une chaîne de Markov dont la distribution stationnaire
 est précisément $p(x)$. Une condition suffisante pour que $p(x)$ soit stationnaire est de
 respecter la condition de bilan détaillé (*detailed balance*) :
 
-$$p(x)\,K_{x,x'} = p(x')\,K_{x',x} \qquad \forall\, x, x' \in \Omega.$$
+$$
+p(x)\,K_{x,x'} = p(x')\,K_{x',x} \qquad \forall\, x, x' \in \Omega.
+$$
 
 Dans le cas d'une distribution de proposition symétrique et de l'utilisation du critère de
 Metropolis, la condition d'acceptation s'écrit :
 
-$$\alpha(x,x') = \min\left\{1,\ e^{-\beta\left(E(x')-E(x)\right)}\right\}.$$
+$$
+\alpha(x,x') = \min\left\lbrace 1, e^{-\beta\left(E(x')-E(x)\right)}\right \rbrace.
+$$
 
 La condition d'acceptation ou de rejet est déterminée en tirant un nombre aléatoire
 $r\in[0,1]$ dans une distribution uniforme, et en comparant $r$ au terme
@@ -102,8 +110,9 @@ d'acceptation cible. La nouvelle position de spin est générée en prenant la s
 actuel et d'un vecteur aléatoire $\Gamma$ suivant une loi normale, pondérée par un paramètre
 $\sigma$ :
 
-$$\mathbf{S}_{new} = \frac{\mathbf{S}_i + \sigma\Gamma}{|\mathbf{S}_i + \sigma\Gamma|},
-\qquad \sigma_{new} = \frac{0.5}{1 - R}\,\sigma,$$
+$$
+\mathbf{S}_{new} = \frac{\mathbf{S}_i + \sigma\Gamma}{|\mathbf{S}_i + \sigma\Gamma|}, \qquad \sigma_{new} = \frac{0.5}{1 - R}\,\sigma,
+$$
 
 avec $R$ le taux d'acceptation local calculé à chaque pas. La valeur de $\sigma$ est ajustée
 dynamiquement pour maintenir un taux d'acceptation à 50 % à chaque température. Le caractère
@@ -127,12 +136,16 @@ la méthode d'échantillonnage avec de la dynamique. La première composante est
 sur-relaxation microcanonique (Creutz 1987, Brown et Woch 1987). Le champ moléculaire local
 ressenti par le spin $i$ s'écrit :
 
-$$\mathbf{h}_i = \sum_{k\in\text{voisins}} \mathbb{J}_{ik}\,\mathbf{S}_k + g^T\mathbf{B},$$
+$$
+\mathbf{h}_i = \sum_{k\in\text{voisins}} \mathbb{J}_{ik}\,\mathbf{S}_k + g^T\mathbf{B},
+$$
 
 et la sur-relaxation consiste à remplacer le spin par son reflet par rapport à la direction
 de ce champ :
 
-$$\mathbf{S}_{new} = 2\left(\mathbf{S}_{old}\cdot\hat{h}_i\right)\hat{h}_i - \mathbf{S}_{old}.$$
+$$
+\mathbf{S}_{new} = 2\left(\mathbf{S}_{old}\cdot\hat{h}_i\right)\hat{h}_i - \mathbf{S}_{old}.
+$$
 
 La projection du spin sur son champ est inchangée par cette réflexion,
 $\mathbf{S}_{new}\cdot\mathbf{h}_i = \mathbf{S}_{old}\cdot\mathbf{h}_i$, de sorte que l'énergie
@@ -147,8 +160,9 @@ La deuxième méthode s'appuie sur la résolution numérique des équations du m
 décrites par les équations de Landau-Lifshitz qui régissent l'évolution temporelle de chaque
 spin autour de son champ moléculaire :
 
-$$\frac{d\mathbf{S}_i(t)}{dt} = \mathbf{S}_i(t) \times \frac{\partial H}{\partial \mathbf{S}_i(t)},
-\qquad \forall i \in \{1,\ldots,N\}.$$
+$$
+\frac{d\mathbf{S}_i(t)}{dt} = \mathbf{S}_i(t) \times \frac{\partial H}{\partial \mathbf{S}_i(t)}, \qquad \forall i \in \lbrace 1,\ldots,N \rbrace.
+$$
 
 Cette méthode est complémentaire à l'échantillonnage gaussien et permet de décorréler le
 système d'une autre manière que par l'algorithme de Metropolis. De plus, comme ces équations
@@ -173,7 +187,9 @@ Sangiovanni-Vincentelli (1986) : l'amplitude des fluctuations d'énergie
 $\sigma_E = \sqrt{\mathrm{Var}(E)} = T\sqrt{Nc_v}$, où $c_v = \mathrm{Var}(E)/(NT^2)$ est
 la chaleur spécifique par site, prescrit le pas en température,
 
-$$\frac{T_{k+1}}{T_k} = \exp\left(-\frac{\lambda}{\sqrt{c_v}}\right),$$
+$$
+\frac{T_{k+1}}{T_k} = \exp\left(-\frac{\lambda}{\sqrt{c_v}}\right),
+$$
 
 avec $\lambda$ un paramètre adimensionné : les pas sont resserrés là où la chaleur spécifique
 est grande, au voisinage des transitions, et relâchés là où les fluctuations d'énergie sont
@@ -188,14 +204,15 @@ initiale $A$, qui contient la fraction la plus ancienne de la chaîne, et une fe
 $B$, qui contient la fraction la plus récente. Le test compare les moyennes de l'observable
 sur les deux fenêtres par le score
 
-$$z = \frac{\langle\mathcal{O}\rangle_A - \langle\mathcal{O}\rangle_B}
-{\sqrt{v_A\, g_A/n_A + v_B\, g_B/n_B}},$$
+$$
+z = \frac{\langle\mathcal{O}\rangle_A - \langle\mathcal{O}\rangle_B} {\sqrt{v_A\, g_A/n_A + v_B\, g_B/n_B}},
+$$
 
 où $\mathcal{O}$ désigne l'observable suivie (l'énergie ou la norme de l'aimantation),
 $\langle\mathcal{O}\rangle_A$ et $\langle\mathcal{O}\rangle_B$ ses moyennes sur les fenêtres
 initiale et finale, $v_A$ et $v_B$ ses variances dans chacune des deux fenêtres, $g_A$ et
 $g_B$ les inefficacités statistiques des fenêtres, et $n_A$ et $n_B$ leurs nombres
-d'échantillons.  Sous
+d'échantillons. Sous
 l'hypothèse de stationnarité, $z$ suit approximativement une loi normale centrée réduite,
 la thermalisation s'étend jusqu'à ce que $|z|$ repasse sous le seuil pour les deux
 observables.
@@ -206,7 +223,9 @@ Monte Carlo, l'inefficacité statistique vaut $g = 1 + 2\tau$ : c'est le facteur
 il faut diviser le nombre de mesures $N_t$ pour obtenir le nombre de mesures réellement
 indépendantes,
 
-$$N_{eff} = \frac{N_t}{g}.$$
+$$
+N_{eff} = \frac{N_t}{g}.
+$$
 
 Les mesures sont espacées d'environ deux temps de corrélation, et la production est étendue
 automatiquement jusqu'à livrer le $N_{eff}$ promis, le manque étant converti en balayages
@@ -219,12 +238,15 @@ lorsqu'il constate que le gain de $N_{eff}$ sature.
 Après avoir atteint l'équilibre, on commence la mesure des quantités thermodynamiques.
 L'aimantation par spin suivant un vecteur $w$ est calculée par :
 
-$$\langle m_w\rangle = \frac{1}{N N_t}\sum_i^N \sum_n^{N_t} \mathbf{S}_i(\tau_n)\cdot w,$$
+$$
+\langle m_w\rangle = \frac{1}{N N_t}\sum_i^N \sum_n^{N_t} \mathbf{S}_i(\tau_n)\cdot w,
+$$
 
 et de même pour l'énergie :
 
-$$\langle E\rangle = -\frac{1}{2NN_t}\sum_i^N \sum_n^{N_t}
-\mathbf{S}_i(\tau_n) \sum_{k\in\text{voisins de } i} \mathbb{J}_{ik}\,\mathbf{S}_k(\tau_n),$$
+$$
+\langle E\rangle = -\frac{1}{2NN_t}\sum_i^N \sum_n^{N_t} \mathbf{S}_i(\tau_n) \sum_{k\in\text{voisins de } i} \mathbb{J}_{ik}\,\mathbf{S}_k(\tau_n),
+$$
 
 avec la somme sur $n$ jusqu'à $N_t$ qui représente le nombre de fois où l'on répète la
 mesure pour une température donnée. Toutes les mesures, leurs erreurs et les diagnostics de
@@ -235,21 +257,26 @@ dynamique des spins à partir de la résolution numérique des équations de Lan
 pour obtenir l'évolution temporelle de chaque spin. On calcule ensuite la double transformée
 de Fourier dans le temps et dans l'espace de chaque spin :
 
-$$\tilde{S}_\perp(Q,\omega) = \frac{1}{NN_t}\sum_{\alpha\in\{1,2\}}\sum_j^{N/2}\sum_n^{N_t}
-\mathbf{S}_{j,\alpha}^{\perp}(t_n)\, e^{-iQ\cdot(R_j + r_\alpha)}\, e^{-i\omega t_n},$$
+$$
+\tilde{S}_\perp(Q,\omega) = \frac{1}{NN_t}\sum_{\alpha\in\lbrace 1,2 \rbrace}\sum_j^{N/2}\sum_n^{N_t} \mathbf{S}_{j,\alpha}^{\perp}(t_n)\, e^{-iQ\cdot(R_j + r_\alpha)}\, e^{-i\omega t_n},
+$$
 
 où $\mathbf{S}_{j,\alpha}^{\perp}(t_n)$ est la projection du spin habillé par le tenseur
 $g$, perpendiculaire au vecteur de diffusion $Q$, les deux sous-réseaux du nid d'abeille
 étant combinés par le facteur de phase $e^{-iQ\cdot(r_B-r_A)}$. Le facteur de structure dynamique est calculé via
 l'expression :
 
-$$\langle S(Q,\omega)\rangle = \tilde{S}_\perp(Q,\omega)\cdot\tilde{S}_\perp^*(Q,\omega),$$
+$$
+\langle S(Q,\omega)\rangle = \tilde{S}_\perp(Q,\omega)\cdot\tilde{S}_\perp^*(Q,\omega),
+$$
 
 où $\langle\cdot\rangle$ désigne la moyenne effectuée sur les instantanés successifs, le
 spectre étant accumulé en moyenne courante puis écrit au dernier instantané. Il en découle
 l'intensité en unité arbitraire :
 
-$$I(Q,\omega) \propto |f(Q)|^2\, S(Q,\omega),$$
+$$
+I(Q,\omega) \propto |f(Q)|^2\, S(Q,\omega),
+$$
 
 avec $f(Q)$ le facteur de forme magnétique de l'ion. Le nombre d'instantanés, la durée
 d'intégration et la résolution en énergie sont réglables. Une fenêtre gaussienne
@@ -270,7 +297,9 @@ liaisons. Ces deux canaux ne sont calculés et écrits que si le terme quartique
 Le code calcule également la susceptibilité AC. Le champ magnétique imposé au système
 dépend du temps :
 
-$$\mathbf{H}(t) = \mathbf{H}_{stat} + H_0 \sin(\omega t)\; g\,\hat{u},$$
+$$
+\mathbf{H}(t) = \mathbf{H}_{stat} + H_0 \sin(\omega t) g\,\hat{u},
+$$
 
 où $H_0$ est l'amplitude du champ oscillant (l'option `--acH0`) en meV avant
 habillage par le tenseur $g$, $\mathbf{H}_{stat}$ est le champ statique de la réplique
@@ -282,8 +311,9 @@ température de la grille : le système est d'abord équilibré sous le seul cha
 puis la mesure s'effectue sous le champ complet, à l'issue du régime transitoire. L'aimantation
 en phase et en quadrature avec l'excitation est démodulée sur un nombre entier de périodes :
 
-$$\chi' = \frac{1}{n\,H_0\,N}\sum_{j=1}^{n} m(t_j)\sin(\omega t_j),
-\qquad \chi'' = -\frac{1}{n\,H_0\,N}\sum_{j=1}^{n} m(t_j)\cos(\omega t_j),$$
+$$
+\chi' = \frac{1}{n\,H_0\,N}\sum_{j=1}^{n} m(t_j)\sin(\omega t_j), \qquad \chi'' = -\frac{1}{n\,H_0\,N}\sum_{j=1}^{n} m(t_j)\cos(\omega t_j),
+$$
 
 où $m(t_j) = \sum_i^N \mathbf{S}_i(t_j)\cdot\hat{u}_g$ est l'aimantation totale du système
 projetée sur la direction d'excitation habillée et normalisée,
@@ -309,7 +339,7 @@ sont sélectionnés pour être mis à jour, la modification de l'un affectera le
 l'énergie de l'autre, faussant ainsi la probabilité d'acceptation $\alpha(x,x')$. Pour
 contourner ce problème, la décomposition en réseau de damier (*checkerboard decomposition*)
 permet de regrouper les spins qui peuvent être mis à jour indépendamment : on décompose le
-réseau en sous-réseaux $\{n_0, n_1, \cdots\}$ tels que les spins d'un même sous-réseau
+réseau en sous-réseaux $\lbrace n_0, n_1, \cdots \rbrace$ tels que les spins d'un même sous-réseau
 n'interagissent qu'avec des spins d'autres sous-réseaux. Puisque les champs locaux ne
 dépendent alors que de spins figés pendant la phase, la mise à jour simultanée de tous les
 spins d'un même sous-réseau est rigoureusement équivalente à un balayage séquentiel et
@@ -324,7 +354,7 @@ rééquilibrage transfère des sites des plus grandes classes vers les plus peti
 écart d'au plus un site. Cette formulation permet de l'adapter à tout type de réseau (carré,
 kagome, triangulaire) et à des interactions allant jusqu'aux voisins lointains. À
 l'intérieur d'une réplique, les sous-réseaux sont mis à jour en parallèle par un groupe de
-threads. 
+threads.
 
 ## Utilisation
 
@@ -395,7 +425,7 @@ java -cp "bin:lib/*" AppParallel <inputDir> <outputDir> [totalThreads] [threadsP
 | `--wmax X` | historique | $w_{max}$ visé, $\Delta = \pi/X$ , 0 pour une coupe statique |
 | `--window W` | 20 | Durée de la fenêtre d'intégration, $\delta\omega = 2\pi/W$ |
 | `--domega X` | | Résolution visée en énergie, $W = 2\pi/X$, alternative à `--window` |
-| `--nSQW N` | 40 | Nombre d'instantanés (moyenne sur une réplique) de $S(Q,\omega)$, $2 \le N $ |
+| `--nSQW N` | 40 | Nombre d'instantanés (moyenne sur une réplique) de $S(Q,\omega)$, avec $N \ge 2$ |
 | `--qz X` | 0 | Composante $z$ du vecteur de diffusion en r.l.u. de $c^*$ |
 | `--field-dir x,y,z` | -1,1,0 | Direction du champ magnétique |
 | `--preset P` | standard | Voir ci-dessous |
@@ -448,13 +478,13 @@ java -cp "bin;lib/*" AppParallel inputDir outputDir 1 1 60 60 0.0 0.0 0.0 12345 
 Echantillonnage rapide pour 1 input :
 
 ```bash
-java  -cp "bin;lib/*" AppParallel inputDir outputDir 1 1 60 60 0.0 0.0 0.0 12345 --endTemp 0.01 --qz 4.67 --preset screening --nSQW 20 --domega 0.05
+java -cp "bin;lib/*" AppParallel inputDir outputDir 1 1 60 60 0.0 0.0 0.0 12345 --endTemp 0.01 --qz 4.67 --preset screening --nSQW 20 --domega 0.05
 ```
 
 Echantillonnage rapide pour plusieurs input :
 
 ```bash
-java  -cp "bin;lib/*" AppParallel inputDir outputDir 32 1 30 30 0.0 0.0 0.0 --seed-random --endTemp 0.05 --qz 0.0 --preset screening --nSQW 20 --domega 0.05 --quiet
+java -cp "bin;lib/*" AppParallel inputDir outputDir 32 1 30 30 0.0 0.0 0.0 --seed-random --endTemp 0.05 --qz 0.0 --preset screening --nSQW 20 --domega 0.05 --quiet
 ```
 
 
